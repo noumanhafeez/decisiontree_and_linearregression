@@ -1,94 +1,38 @@
 import pandas as pd
-import numpy as np
-from sklearn.preprocessing import LabelEncoder, StandardScaler
-from sklearn.model_selection import train_test_split
+import sklearn
+from data_ingestion import load_data_from_kaggle
+from sklearn.preprocessing import LabelEncoder
 from ..utils.logger import get_logger
 
-logger = get_logger("preprocessor", "logs/preprocessor.log")
+logger = get_logger("data_loader", "logs/data_loader.log")
 
 
-class DataPreprocessor:
-    def __init__(self):
-        self.label_encoders = {}
-        self.scaler = StandardScaler()
-        self.numeric_columns = None
-        self.categorical_columns = None
+def preprocess() -> pd.DataFrame:
+    try:
+        logger.info("Starting preprocessing")
 
-    # -----------------------------
-    # 1. Missing Value Handling
-    # -----------------------------
-    def handle_missing_values(self, df: pd.DataFrame) -> pd.DataFrame:
-        logger.info("Handling missing values")
+        # Load data
+        df = load_data_from_kaggle("uciml/mushroom-classification")
+        logger.info(f"Data loaded successfully. Shape: {df.shape}")
 
-        df = df.copy()
+        # Select features
+        select_features = df[['gill-size', 'odor', 'cap-surface', 'class']]
+        logger.info(f"Selected features: {list(select_features.columns)}")
 
-        for col in df.columns:
-            if df[col].dtype == "object":
-                df[col] = df[col].fillna(df[col].mode()[0])
-            else:
-                df[col] = df[col].fillna(df[col].median())
+        new_df = select_features.copy()
 
-        return df
+        # Encoding
+        logger.info("Applying Label Encoding")
 
-    # -----------------------------
-    # 2. Split features/target
-    # -----------------------------
-    def split_features_target(self, df: pd.DataFrame, target: str):
-        logger.info(f"Splitting features and target: {target}")
-
-        X = df.drop(columns=[target])
-        y = df[target]
-
-        return X, y
-
-    # -----------------------------
-    # 3. Fit Encoders (TRAIN ONLY)
-    # -----------------------------
-    def fit_transform_features(self, X: pd.DataFrame):
-        logger.info("Fitting encoders and scaler")
-
-        X = X.copy()
-
-        self.numeric_columns = X.select_dtypes(include=np.number).columns
-        self.categorical_columns = X.select_dtypes(exclude=np.number).columns
-
-        # ---- Encode categorical ----
-        for col in self.categorical_columns:
+        for col in select_features.columns:
             le = LabelEncoder()
-            X[col] = le.fit_transform(X[col])
-            self.label_encoders[col] = le
+            new_df[col] = le.fit_transform(df[col])
+            logger.debug(f"Encoded column: {col}")
 
-        # ---- Scale numeric ----
-        X[self.numeric_columns] = self.scaler.fit_transform(X[self.numeric_columns])
+        logger.info(f"Preprocessing completed. Final shape: {new_df.shape}")
 
-        return X
+        return new_df
 
-    # -----------------------------
-    # 4. Transform ONLY (TEST DATA)
-    # -----------------------------
-    def transform_features(self, X: pd.DataFrame):
-        logger.info("Transforming new data")
-
-        X = X.copy()
-
-        # ---- categorical ----
-        for col in self.categorical_columns:
-            le = self.label_encoders[col]
-            X[col] = le.transform(X[col])
-
-        # ---- numeric ----
-        X[self.numeric_columns] = self.scaler.transform(X[self.numeric_columns])
-
-        return X
-
-    # -----------------------------
-    # 5. Full pipeline
-    # -----------------------------
-    def preprocess(self, df: pd.DataFrame, target: str):
-        df = self.handle_missing_values(df)
-
-        X, y = self.split_features_target(df, target)
-
-        X = self.fit_transform_features(X)
-
-        return X, y
+    except Exception as e:
+        logger.exception(f"Error during preprocessing: {e}")
+        raise
