@@ -1,59 +1,40 @@
-import os
-import requests
 import pandas as pd
 from pathlib import Path
-from ..utils.logger import get_logger
+import kagglehub
+
+from decision_tree.utils.logger import get_logger
 
 logger = get_logger("data_loader", "logs/data_loader.log")
 
 
-class DataLoader:
-    def __init__(self, data_dir: str = "data/raw"):
-        self.data_dir = Path(data_dir)
-        self.data_dir.mkdir(parents=True, exist_ok=True)
+def load_data_from_kaggle(dataset: str) -> pd.DataFrame:
+    """
+    Download dataset from Kaggle and return DataFrame
+    """
+    try:
+        logger.info(f"Downloading dataset: {dataset}")
 
-    def download_file(self, url: str, filename: str) -> str:
-        """
-        Download file from URL and store locally.
-        """
-        file_path = self.data_dir / filename
+        # download dataset
+        path = kagglehub.dataset_download(dataset)
+        logger.info(f"Downloaded to: {path}")
 
-        if file_path.exists():
-            logger.info(f"File already exists: {file_path}. Skipping download.")
-            return str(file_path)
+        # find csv file
+        folder = Path(path)
+        csv_files = list(folder.glob("*.csv"))
 
-        try:
-            logger.info(f"Downloading data from {url}")
-            response = requests.get(url, timeout=30)
-            response.raise_for_status()
+        if not csv_files:
+            logger.error("No CSV file found in dataset")
+            raise FileNotFoundError("No CSV file found in dataset")
 
-            with open(file_path, "wb") as f:
-                f.write(response.content)
+        file_path = csv_files[0]
+        logger.info(f"Loading file: {file_path.name}")
 
-            logger.info(f"Saved file to {file_path}")
-            return str(file_path)
+        # load csv
+        df = pd.read_csv(file_path)
 
-        except Exception as e:
-            logger.error(f"Failed to download data: {e}")
-            raise
+        logger.info(f"Data loaded successfully. Shape: {df.shape}")
+        return df
 
-    def load_csv(self, file_path: str) -> pd.DataFrame:
-        """
-        Load CSV into pandas DataFrame.
-        """
-        try:
-            logger.info(f"Loading CSV from {file_path}")
-            df = pd.read_csv(file_path)
-            logger.info(f"Loaded data shape: {df.shape}")
-            return df
-
-        except Exception as e:
-            logger.error(f"Error loading CSV: {e}")
-            raise
-
-    def load_from_url(self, url: str, filename: str) -> pd.DataFrame:
-        """
-        Full pipeline: download + load
-        """
-        local_path = self.download_file(url, filename)
-        return self.load_csv(local_path)
+    except Exception as e:
+        logger.exception(f"Error while loading data: {e}")
+        raise
