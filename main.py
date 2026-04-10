@@ -1,1 +1,1 @@
-## Here, we will create two modules decision tree and linear regression for assignment task.
+# Here will work on code for decision tree algorithm from scratch.
