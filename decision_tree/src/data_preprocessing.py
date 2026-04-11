@@ -1,6 +1,6 @@
 import pandas as pd
 import sklearn
-from data_ingestion import load_data_from_kaggle
+from decision_tree.src.data_ingestion import load_data_from_kaggle
 from sklearn.preprocessing import LabelEncoder
 from ..utils.logger import get_logger
 
