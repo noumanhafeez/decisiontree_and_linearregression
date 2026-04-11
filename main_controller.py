@@ -14,8 +14,8 @@ def show_menu():
     print("1. Decision Tree")
     print("2. Linear Regression")
     print("3. Visualize Linear Regression")
-    print("4. Exit")
-    print("5. Multi Feature Linear Regression")
+    print("4. Multi Feature Linear Regression")
+    print("5. Exit")
     print("==============================")
 
 
@@ -37,7 +37,7 @@ def main(decision_tree_samples=None, linear_regression_samples=None):
             show_menu()
             choice = input("Enter your choice: ").strip()
 
-            if choice == "4":
+            if choice == "5":
                 print("Exiting ML System... Goodbye 👋")
                 break
 
@@ -63,7 +63,7 @@ def main(decision_tree_samples=None, linear_regression_samples=None):
                 print("Launching regression visualization...")
                 plot_regression()
 
-            elif choice == "5":
+            elif choice == "4":
                 print("Running Multi Feature Linear Regression...")
                 run_multi_pipeline()
 
