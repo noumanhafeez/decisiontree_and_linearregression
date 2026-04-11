@@ -24,10 +24,10 @@ def split_data(df: pd.DataFrame):
         y_test (pd.Series): Testing target
     """
     try:
-        logger.info(f"Starting data split. Training size: 80%. Test size: 20%, Random state: 42")
+        logger.info(f"Starting data split. Training size: 90%. Test size: 10%, Random state: 42")
 
-        X = df.drop(columns=['class'])
-        y = df['class']
+        X = df.drop(columns=['Sales'])
+        y = df['Sales']
 
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.1, random_state=42
