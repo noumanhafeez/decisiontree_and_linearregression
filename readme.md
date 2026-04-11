@@ -1,6 +1,6 @@
 # Decision Tree & Linear Regression (From Scratch + ML System)
 
-## 📌 Overview
+##  Overview
 
 This project is a complete Machine Learning system that implements:
 
@@ -12,9 +12,9 @@ It follows a modular pipeline-based architecture similar to industry-level ML sy
 
 ---
 
-## 🚀 Features
+##  Features
 
-### 🌳 Decision Tree (ID3)
+###  Decision Tree (ID3)
 
 * Built from scratch (no sklearn)
 * Entropy & Information Gain
@@ -22,7 +22,7 @@ It follows a modular pipeline-based architecture similar to industry-level ML sy
 * Prediction system
 * JSON tree export
 
-### 📈 Linear Regression
+###  Linear Regression
 
 * Implemented from scratch
 * Uses mathematical formula for slope & intercept
@@ -34,7 +34,7 @@ It follows a modular pipeline-based architecture similar to industry-level ML sy
 * Supports multiple features
 * Separate pipeline
 
-### ⚙️ System Features
+###  System Features
 
 * Modular pipeline design
 * Logging across all modules
@@ -44,7 +44,7 @@ It follows a modular pipeline-based architecture similar to industry-level ML sy
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```
 decisiontree_and_linearregression/
@@ -91,7 +91,7 @@ decisiontree_and_linearregression/
 
 ---
 
-## 🧠 How It Works
+##  How It Works
 
 ### Decision Tree Pipeline
 
@@ -117,7 +117,7 @@ decisiontree_and_linearregression/
 
 ---
 
-## ▶️ How to Run
+## How to Run
 
 ### 1. Install Dependencies
 
@@ -157,7 +157,7 @@ python main.py
 
 ---
 
-## 📊 Sample Inputs
+## Sample Inputs
 
 ### Decision Tree
 
@@ -176,7 +176,7 @@ python main.py
 
 ---
 
-## 📈 Outputs
+## Outputs
 
 * Model files → `artifacts/`
 * Logs → `logs/`
@@ -185,7 +185,7 @@ python main.py
 
 ---
 
-## 🛠️ Technologies Used
+##  Technologies Used
 
 * Python
 * NumPy
@@ -196,7 +196,7 @@ python main.py
 
 ---
 
-## 👨‍💻 Author
+##  Author
 
 **Nouman Hafeez**
 
@@ -205,7 +205,7 @@ python main.py
 
 ---
 
-## ⭐ Final Note
+##  Final Note
 
 This project demonstrates:
 
