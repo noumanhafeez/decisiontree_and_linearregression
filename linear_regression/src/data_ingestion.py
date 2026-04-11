@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 import kagglehub
 
-from decision_tree.utils.logger import get_logger
+from linear_regression.utils.logger import get_logger
 
 logger = get_logger("data_loader", "logs/data_loader.log")
 
